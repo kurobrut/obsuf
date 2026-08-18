@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lua Obfuscator - Code Protection Tool</title>
+    <title>Lua Obfuscator - Maximum Protection</title>
     <style>
         * {
             margin: 0;
@@ -15,21 +15,19 @@
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
             --bg-tertiary: #334155;
-            --accent: #10b981;
-            --accent-hover: #059669;
-            --accent-light: #86efac;
+            --accent: #ef4444;
+            --accent-hover: #dc2626;
+            --accent-light: #fca5a5;
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
             --border-color: #475569;
-            --error: #ef4444;
-            --warning: #f59e0b;
             --success: #10b981;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, #1a2f4a 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1a2f4a 100%);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
@@ -48,10 +46,10 @@
         }
 
         .header-content h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ef4444 0%, #fca5a5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -59,56 +57,13 @@
 
         .header-content p {
             color: var(--text-secondary);
-            font-size: 1rem;
-            margin-bottom: 20px;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Buttons */
-        button, .button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
+        .header-subtitle {
+            color: var(--text-muted);
             font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--accent);
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.85rem;
         }
 
         /* Main Layout */
@@ -129,39 +84,30 @@
         .panel {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .panel-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             color: var(--text-primary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .panel-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(16, 185, 129, 0.2);
-            border-radius: 4px;
-            font-size: 12px;
+            font-size: 18px;
         }
 
         /* Text Areas */
@@ -174,145 +120,135 @@
 
         textarea {
             flex: 1;
-            min-height: 400px;
-            background: var(--bg-primary);
+            min-height: 450px;
+            background: #0a0e27;
             color: #7dd3fc;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             padding: 15px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.95rem;
             resize: vertical;
             outline: none;
-            transition: border-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
 
         textarea::placeholder {
             color: var(--text-muted);
         }
 
-        /* Operations Panel */
-        .operations {
+        /* Control Panel */
+        .control-panel {
+            grid-column: 1 / -1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            grid-column: 1 / -1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        .operations-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .operation-item {
+        .control-content {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .operation-item:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--accent);
-        }
-
-        .operation-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--accent);
-        }
-
-        .operation-label {
+        .control-info {
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            flex: 1;
+            gap: 8px;
         }
 
-        .operation-name {
-            font-weight: 500;
+        .control-label {
+            font-size: 1.1rem;
+            font-weight: 600;
             color: var(--text-primary);
         }
 
-        .operation-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Encryption Key Input */
-        .encryption-key-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+        .control-desc {
+            color: var(--text-secondary);
             font-size: 0.95rem;
         }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        /* Stats Panel */
-        .stats-panel {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            grid-column: 1 / -1;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-item {
+        .control-features {
             display: flex;
-            flex-direction: column;
-            gap: 5px;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
         }
 
-        .stat-label {
+        .feature-tag {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            padding: 6px 12px;
+            border-radius: 4px;
             font-size: 0.85rem;
-            color: var(--text-muted);
+            font-weight: 500;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Buttons */
+        button {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--accent-light);
-            font-family: 'Courier New', Courier, monospace;
+        .btn-obfuscate {
+            background: linear-gradient(135deg, var(--accent) 0%, #dc2626 100%);
+            color: white;
+            padding: 14px 40px;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
         }
 
-        .stat-comparison {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 4px;
+        .btn-obfuscate:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+
+        .btn-obfuscate:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         /* Messages */
@@ -320,20 +256,21 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 150px;
+            max-height: 120px;
             overflow-y: auto;
         }
 
         .message {
-            padding: 10px 12px;
-            border-radius: 4px;
+            padding: 10px 14px;
+            border-radius: 6px;
             font-size: 0.9rem;
-            background: rgba(16, 185, 129, 0.15);
-            color: #86efac;
             display: flex;
             align-items: center;
             gap: 8px;
             animation: slideIn 0.3s ease;
+            background: rgba(16, 185, 129, 0.15);
+            color: #86efac;
+            border-left: 3px solid var(--success);
         }
 
         @keyframes slideIn {
@@ -350,17 +287,16 @@
         .message.error {
             background: rgba(239, 68, 68, 0.15);
             color: #fca5a5;
+            border-left-color: var(--accent);
+        }
+
+        .message.warning {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fcd34d;
+            border-left-color: #f59e0b;
         }
 
         /* Loading State */
-        .processing {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--accent-light);
-            font-size: 0.9rem;
-        }
-
         .spinner {
             width: 16px;
             height: 16px;
@@ -374,7 +310,61 @@
             to { transform: rotate(360deg); }
         }
 
-        /* File Upload Area */
+        /* Stats Panel */
+        .stats-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            grid-column: 1 / -1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .stat-comparison {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Upload Area */
         .upload-area {
             border: 2px dashed var(--border-color);
             border-radius: 8px;
@@ -382,22 +372,24 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
-            background: rgba(16, 185, 129, 0.05);
+            background: rgba(239, 68, 68, 0.05);
         }
 
         .upload-area:hover {
             border-color: var(--accent);
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .upload-area.dragover {
             border-color: var(--accent);
-            background: rgba(16, 185, 129, 0.15);
+            background: rgba(239, 68, 68, 0.15);
+            transform: scale(1.02);
         }
 
         .upload-area p {
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            font-weight: 500;
         }
 
         .upload-area small {
@@ -408,12 +400,8 @@
             display: none;
         }
 
-        /* Control Buttons Group */
-        .control-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .hidden {
+            display: none !important;
         }
 
         /* Responsive */
@@ -423,52 +411,36 @@
             }
 
             .header-content h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
-            .operations-grid {
-                grid-template-columns: 1fr;
+            .control-content {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            .btn-obfuscate {
+                width: 100%;
+                justify-content: center;
             }
 
             textarea {
                 min-height: 300px;
             }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
         }
 
-        /* Utility */
-        .hidden {
-            display: none !important;
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
-        .text-center {
-            text-align: center;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
-
-        .mt-20 {
-            margin-top: 20px;
-        }
-
-        /* Smooth transitions */
-        * {
-            transition-property: background-color, border-color, box-shadow;
-            transition-duration: 0.2s;
-            transition-timing-function: ease;
-        }
-
-        /* Icon using Unicode */
-        .icon::before {
-            font-weight: bold;
-            margin-right: 4px;
-        }
-
-        .icon-input::before { content: "📥"; }
-        .icon-output::before { content: "📤"; }
-        .icon-tools::before { content: "🔧"; }
-        .icon-stats::before { content: "📊"; }
     </style>
 </head>
 <body>
@@ -476,8 +448,9 @@
         <!-- Header -->
         <header>
             <div class="header-content">
-                <h1>🔐 Lua Obfuscator</h1>
-                <p>Protect your Lua code with minification, obfuscation, and encryption</p>
+                <h1>🔐 LUA OBFUSCATOR</h1>
+                <p>Maximum Protection. One Click.</p>
+                <p class="header-subtitle">Aggressive code obfuscation for Roblox & Lua development</p>
             </div>
         </header>
 
@@ -485,17 +458,14 @@
         <div class="layout">
             <!-- Input Panel -->
             <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <div class="panel-icon icon-input">📥</div>
-                        Source Code
-                    </div>
-                    <button class="btn-small btn-secondary" onclick="clearInput()">Clear</button>
+                <div class="panel-title">
+                    <div class="panel-icon">📥</div>
+                    Source Code
                 </div>
                 <div class="editor">
-                    <textarea id="inputCode" placeholder="Paste your Lua code here... or drag and drop a .lua file below"></textarea>
+                    <textarea id="inputCode" placeholder="Paste your Lua code here or drag & drop a .lua file..."></textarea>
                     <div class="upload-area" id="uploadArea">
-                        <p><strong>📁 Drag & drop a .lua file here</strong></p>
+                        <p>📁 Drag & Drop File</p>
                         <small>or click to browse</small>
                         <input type="file" id="fileInput" accept=".lua,.txt" />
                     </div>
@@ -504,113 +474,67 @@
 
             <!-- Output Panel -->
             <div class="panel">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <div class="panel-icon icon-output">📤</div>
-                        Result
-                    </div>
-                    <button class="btn-small btn-secondary" onclick="copyOutput()">Copy</button>
+                <div class="panel-title">
+                    <div class="panel-icon">📤</div>
+                    Obfuscated Code
                 </div>
                 <div class="editor">
-                    <textarea id="outputCode" readonly placeholder="Your processed code will appear here..."></textarea>
+                    <textarea id="outputCode" readonly placeholder="Your obfuscated code will appear here..."></textarea>
                 </div>
-                <button class="btn-primary" onclick="downloadOutput()">⬇️ Download</button>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="copyOutput()">📋 Copy</button>
+                    <button class="btn-secondary" onclick="downloadOutput()">⬇️ Download</button>
+                    <button class="btn-secondary" onclick="clearAll()">🗑️ Clear</button>
+                </div>
             </div>
         </div>
 
-        <!-- Operations Panel -->
-        <div class="operations">
-            <div class="panel">
-                <div class="panel-title">
-                    <div class="panel-icon icon-tools">🔧</div>
-                    Operations
-                </div>
-
-                <div class="operations-grid">
-                    <label class="operation-item">
-                        <input type="checkbox" id="op-remove-comments" onchange="processCode()">
-                        <div class="operation-label">
-                            <span class="operation-name">Remove Comments</span>
-                            <span class="operation-desc">Strip all comment lines</span>
-                        </div>
-                    </label>
-
-                    <label class="operation-item">
-                        <input type="checkbox" id="op-minify" onchange="processCode()">
-                        <div class="operation-label">
-                            <span class="operation-name">Minify</span>
-                            <span class="operation-desc">Reduce file size</span>
-                        </div>
-                    </label>
-
-                    <label class="operation-item">
-                        <input type="checkbox" id="op-beautify" onchange="processCode()">
-                        <div class="operation-label">
-                            <span class="operation-name">Beautify</span>
-                            <span class="operation-desc">Format with indentation</span>
-                        </div>
-                    </label>
-
-                    <label class="operation-item">
-                        <input type="checkbox" id="op-shorten-names" onchange="processCode()">
-                        <div class="operation-label">
-                            <span class="operation-name">Shorten Names</span>
-                            <span class="operation-desc">a, b, c, aa, ab...</span>
-                        </div>
-                    </label>
-
-                    <label class="operation-item">
-                        <input type="checkbox" id="op-obfuscate" onchange="processCode()">
-                        <div class="operation-label">
-                            <span class="operation-name">Obfuscate</span>
-                            <span class="operation-desc">Random variable names</span>
-                        </div>
-                    </label>
-
-                    <label class="operation-item">
-                        <input type="checkbox" id="op-encrypt-strings" onchange="processCode()">
-                        <div class="operation-label">
-                            <span class="operation-name">Encrypt Strings</span>
-                            <span class="operation-desc">XOR string encryption</span>
-                        </div>
-                    </label>
-                </div>
-
-                <!-- Encryption Key -->
-                <div class="encryption-key-group">
-                    <label for="encryptionKey" style="color: var(--text-secondary);">Encryption Key:</label>
-                    <input type="text" id="encryptionKey" placeholder="default" onchange="processCode()">
-                </div>
-
-                <!-- Processing Status -->
-                <div id="processingStatus" class="hidden processing">
-                    <div class="spinner"></div>
-                    <span>Processing...</span>
-                </div>
-
-                <!-- Messages -->
-                <div id="messages" class="messages"></div>
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="panel-title">
+                <div class="panel-icon">⚙️</div>
+                Protection Settings
             </div>
+
+            <div class="control-content">
+                <div class="control-info">
+                    <div class="control-label">Maximum Obfuscation</div>
+                    <div class="control-desc">All protection techniques applied simultaneously</div>
+                    <div class="control-features">
+                        <span class="feature-tag">✓ Remove Comments</span>
+                        <span class="feature-tag">✓ Minify Code</span>
+                        <span class="feature-tag">✓ Obfuscate Variables</span>
+                        <span class="feature-tag">✓ Encrypt Strings</span>
+                    </div>
+                </div>
+                <button class="btn-obfuscate" id="obfuscateBtn" onclick="obfuscate()">🔒 OBFUSCATE</button>
+            </div>
+
+            <!-- Processing Status -->
+            <div id="processingStatus" class="hidden" style="display: flex; align-items: center; gap: 10px; color: var(--accent-light);">
+                <div class="spinner"></div>
+                <span>Processing... This may take a moment</span>
+            </div>
+
+            <!-- Messages -->
+            <div id="messages" class="messages"></div>
         </div>
 
         <!-- Stats Panel -->
         <div class="stats-panel">
-            <div class="panel-title" style="margin-bottom: 20px;">
-                <div class="panel-icon icon-stats">📊</div>
-                Statistics
-            </div>
+            <div class="stats-title">📊 Statistics</div>
             <div class="stats-grid">
                 <div class="stat-item">
                     <span class="stat-label">Original Size</span>
                     <span class="stat-value" id="stat-size-before">0 B</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-label">Result Size</span>
+                    <span class="stat-label">Obfuscated Size</span>
                     <span class="stat-value" id="stat-size-after">0 B</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Size Reduction</span>
-                    <span class="stat-value" id="stat-reduction" style="color: var(--accent);">0%</span>
+                    <span class="stat-value" id="stat-reduction" style="color: #fca5a5;">0%</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Lines (Before)</span>
@@ -643,6 +567,7 @@
         const fileInput = document.getElementById('fileInput');
         const processingStatus = document.getElementById('processingStatus');
         const messagesDiv = document.getElementById('messages');
+        const obfuscateBtn = document.getElementById('obfuscateBtn');
 
         // File Upload Handling
         uploadArea.addEventListener('click', () => fileInput.click());
@@ -672,41 +597,30 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 inputCode.value = e.target.result;
-                processCode();
+                addMessage(`✓ Loaded ${file.name} (${formatBytes(file.size)})`, 'success');
+                // Auto-analyze
+                analyzeCode();
             };
             reader.readAsText(file);
         }
 
-        // Process Code
-        async function processCode() {
+        // Obfuscate Code
+        async function obfuscate() {
             if (!inputCode.value.trim()) {
-                outputCode.value = '';
-                resetStats();
+                addMessage('❌ Please paste or upload Lua code first', 'error');
                 return;
             }
 
             showProcessing(true);
+            obfuscateBtn.disabled = true;
             messagesDiv.innerHTML = '';
 
-            const operations = {
-                remove_comments: document.getElementById('op-remove-comments').checked,
-                minify: document.getElementById('op-minify').checked,
-                beautify: document.getElementById('op-beautify').checked,
-                shorten_names: document.getElementById('op-shorten-names').checked,
-                obfuscate: document.getElementById('op-obfuscate').checked,
-                encrypt_strings: document.getElementById('op-encrypt-strings').checked,
-            };
-
-            const encryptionKey = document.getElementById('encryptionKey').value || 'default';
-
             try {
-                const response = await fetch('/api/process', {
+                const response = await fetch('/api/obfuscate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        code: inputCode.value,
-                        operations: operations,
-                        encryption_key: encryptionKey
+                        code: inputCode.value
                     })
                 });
 
@@ -716,23 +630,45 @@
                     outputCode.value = data.result;
                     updateStats(data.stats_before, data.stats_after);
                     
-                    // Show messages
-                    data.messages.forEach(msg => {
-                        addMessage(msg, 'success');
-                    });
-                    
-                    if (data.size_reduction) {
-                        addMessage(`Size reduced by ${data.size_reduction}`, 'success');
-                    }
+                    addMessage('✓ Code obfuscated successfully', 'success');
+                    addMessage(`✓ Size reduced by ${data.size_reduction}`, 'success');
+                    addMessage('✓ All protection techniques applied', 'success');
                 } else {
-                    addMessage('Error: ' + data.error, 'error');
-                    outputCode.value = '';
+                    addMessage('❌ Error: ' + data.error, 'error');
                 }
             } catch (error) {
-                addMessage('Error: ' + error.message, 'error');
-                outputCode.value = '';
+                addMessage('❌ Error: ' + error.message, 'error');
             } finally {
                 showProcessing(false);
+                obfuscateBtn.disabled = false;
+            }
+        }
+
+        // Analyze Code
+        async function analyzeCode() {
+            if (!inputCode.value.trim()) {
+                resetStats();
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        code: inputCode.value
+                    })
+                });
+
+                const stats = await response.json();
+                
+                document.getElementById('stat-size-before').textContent = formatBytes(stats.size_original);
+                document.getElementById('stat-lines-before').textContent = stats.total_lines;
+                document.getElementById('stat-identifiers').textContent = stats.unique_identifiers;
+                document.getElementById('stat-functions').textContent = stats.total_functions;
+                document.getElementById('stat-strings').textContent = stats.total_strings;
+            } catch (error) {
+                console.error('Analysis error:', error);
             }
         }
 
@@ -773,13 +709,12 @@
 
         function addMessage(msg, type = 'success') {
             const div = document.createElement('div');
-            div.className = `message ${type === 'error' ? 'error' : ''}`;
+            div.className = `message ${type === 'error' ? 'error' : type === 'warning' ? 'warning' : ''}`;
             div.textContent = msg;
             messagesDiv.appendChild(div);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
             
-            // Auto-remove after 5 seconds
-            setTimeout(() => div.remove(), 5000);
+            setTimeout(() => div.remove(), 6000);
         }
 
         function showProcessing(show) {
@@ -787,54 +722,46 @@
         }
 
         function copyOutput() {
-            if (!outputCode.value) return;
+            if (!outputCode.value) {
+                addMessage('❌ No code to copy', 'error');
+                return;
+            }
             navigator.clipboard.writeText(outputCode.value);
             addMessage('✓ Copied to clipboard', 'success');
         }
 
-        function clearInput() {
+        function downloadOutput() {
+            if (!outputCode.value) {
+                addMessage('❌ No code to download', 'error');
+                return;
+            }
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(outputCode.value));
+            element.setAttribute('download', 'obfuscated.lua');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            addMessage('✓ Downloaded obfuscated.lua', 'success');
+        }
+
+        function clearAll() {
             inputCode.value = '';
             outputCode.value = '';
             resetStats();
             messagesDiv.innerHTML = '';
         }
 
-        async function downloadOutput() {
-            if (!outputCode.value) {
-                addMessage('No code to download', 'error');
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/download', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        code: outputCode.value,
-                        filename: 'obfuscated.lua'
-                    })
-                });
-
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'obfuscated.lua';
-                a.click();
-                window.URL.revokeObjectURL(url);
-            } catch (error) {
-                addMessage('Download failed: ' + error.message, 'error');
-            }
-        }
-
-        // Initial stats
-        resetStats();
-
-        // Auto-process on input
+        // Analyze on input
+        let analyzeTimeout;
         inputCode.addEventListener('input', () => {
-            clearTimeout(inputCode.timer);
-            inputCode.timer = setTimeout(processCode, 500);
+            clearTimeout(analyzeTimeout);
+            analyzeTimeout = setTimeout(analyzeCode, 800);
         });
+
+        // Initial
+        resetStats();
     </script>
 </body>
 </html>
