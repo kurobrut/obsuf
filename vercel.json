@@ -1,11 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
-    "api/analyze.py": {
-      "memory": 512,
-      "maxDuration": 60
-    },
-    "api/obfuscate.py": {
+    "api/*.py": {
       "memory": 512,
       "maxDuration": 60
     }
