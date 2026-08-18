@@ -46,8 +46,10 @@ class LuaLexer:
 
     def peek(self, offset=0):
         pos = self.pos + offset
+
         if pos < len(self.code):
             return self.code[pos]
+
         return ""
 
     def advance(self):
@@ -81,16 +83,16 @@ class LuaLexer:
                 self.advance()
                 next_char = self.advance()
 
-                escape_map = {
+                escapes = {
                     "n": "\n",
                     "t": "\t",
                     "r": "\r",
                     "\\": "\\",
                     '"': '"',
-                    "'": "'",
+                    "'": "'"
                 }
 
-                result += escape_map.get(next_char, next_char)
+                result += escapes.get(next_char, next_char)
             else:
                 result += self.advance()
 
@@ -171,11 +173,7 @@ class LuaLexer:
                     Token(token_type, value, line, column)
                 )
 
-            elif (
-                char == "."
-                and self.peek(1) == "."
-                and self.peek(2) == "."
-            ):
+            elif char == "." and self.peek(1) == "." and self.peek(2) == ".":
                 self.advance()
                 self.advance()
                 self.advance()
@@ -257,7 +255,7 @@ class LuaLexer:
         return self.tokens
 
 
-def analyze(code):
+def analyze_code(code):
     lexer = LuaLexer(code)
     tokens = lexer.tokenize()
 
@@ -269,10 +267,7 @@ def analyze(code):
         if token.type == TokenType.IDENTIFIER:
             identifiers.append(token.value)
 
-        elif (
-            token.type == TokenType.KEYWORD
-            and token.value == "function"
-        ):
+        elif token.type == TokenType.KEYWORD and token.value == "function":
             functions += 1
 
         elif token.type == TokenType.STRING:
@@ -285,7 +280,7 @@ def analyze(code):
         "total_functions": functions,
         "total_strings": strings,
         "total_lines": tokens[-1].line if tokens else 0,
-        "size_original": len(code),
+        "size_original": len(code)
     }
 
 
@@ -303,7 +298,10 @@ def send_json(handler, status, data):
         "Access-Control-Allow-Headers",
         "Content-Type"
     )
-    handler.send_header("Content-Length", str(len(body)))
+    handler.send_header(
+        "Content-Length",
+        str(len(body))
+    )
     handler.end_headers()
 
     handler.wfile.write(body)
@@ -316,21 +314,23 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            content_length = int(
+            length = int(
                 self.headers.get("Content-Length", "0")
             )
 
-            raw_body = self.rfile.read(content_length)
+            raw_body = self.rfile.read(length)
 
             if not raw_body:
                 send_json(
                     self,
                     400,
-                    {"error": "No request body provided"}
+                    {"error": "Empty request body"}
                 )
                 return
 
-            body = json.loads(raw_body.decode("utf-8"))
+            body = json.loads(
+                raw_body.decode("utf-8")
+            )
 
             code = body.get("code", "")
 
@@ -342,7 +342,7 @@ class handler(BaseHTTPRequestHandler):
                 )
                 return
 
-            stats = analyze(code)
+            stats = analyze_code(code)
 
             send_json(
                 self,
@@ -368,6 +368,8 @@ class handler(BaseHTTPRequestHandler):
         send_json(
             self,
             405,
-            {"error": "Use POST /api/analyze"}
+            {
+                "error": "Method not allowed",
+                "message": "Use POST /api/analyze"
+            }
         )
-        return
